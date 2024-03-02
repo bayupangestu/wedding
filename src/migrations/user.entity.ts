@@ -7,10 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany
+  OneToMany,
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
-import { BrideInfo } from './bride_info.entity';
 import { UserPackageTemplate } from './user_package_template.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -30,12 +32,11 @@ export class User extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true, default: null })
   public lastLoginAt: Date | null;
 
-  @Column({
-    type: 'enum',
-    enum: ['superadmin', 'admin', 'user'],
-    default: 'user'
-  })
-  public role!: 'superadmin' | 'admin' | 'user';
+  @Column({ type: 'varchar', nullable: true })
+  public slug: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  public phone_number: string | null;
 
   @OneToMany(
     () => UserPackageTemplate,
@@ -45,6 +46,12 @@ export class User extends BaseEntity {
     }
   )
   public user_package_template!: UserPackageTemplate[];
+
+  @ManyToOne(() => Role, (role) => role.user, {
+    onDelete: 'SET NULL'
+  })
+  @JoinColumn({ name: 'role_id' })
+  public role!: Role;
 
   @CreateDateColumn({ type: 'timestamp' })
   public createdAt!: Date;

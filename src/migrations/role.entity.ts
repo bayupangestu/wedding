@@ -1,45 +1,41 @@
+import { Exclude } from 'class-transformer';
 import {
-  Entity,
+  BaseEntity,
   Column,
+  Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  BaseEntity,
   OneToMany
 } from 'typeorm';
-
-import { Exclude } from 'class-transformer';
+import { User } from './user.entity';
 import { RoleMenu } from './role_menu.entity';
 
 @Entity()
-export class ListMenuCms extends BaseEntity {
+export class Role extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
   @Column({ type: 'varchar' })
   public name!: string;
 
-  @Column({ type: 'text', nullable: true })
-  public icon!: string;
+  @OneToMany(() => User, (user) => user.role, {
+    cascade: true
+  })
+  public user!: User[];
 
-  @Column({ type: 'varchar', nullable: true })
-  public path!: string;
-
-  @OneToMany(() => RoleMenu, (role_menu) => role_menu.list_menu_cms, {
+  @OneToMany(() => RoleMenu, (role_menu) => role_menu.role, {
     cascade: true
   })
   public role_menu!: RoleMenu[];
 
-  @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;
 
-  @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   public updated_at!: Date;
 
-  @Exclude()
-  @DeleteDateColumn({ type: 'timestamp' })
-  public deleted_at!: Date;
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  public deleted_at: Date | null;
 }

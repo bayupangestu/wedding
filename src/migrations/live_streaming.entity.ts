@@ -28,37 +28,37 @@ export class LiveStreaming extends BaseEntity {
   @ManyToOne(() => ElementTop, (element_top) => element_top.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_top_id' })
   public element_top!: ElementTop;
 
   @ManyToOne(() => ElementBot, (element_bot) => element_bot.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_bot_id' })
   public element_bot!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'background_id' })
   public background!: Background;
 
   @ManyToOne(() => Frame, (frame) => frame.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'frame_id' })
   public frame!: Frame;
 
   @ManyToOne(() => Animation, (animation) => animation.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'animation_id' })
   public animation!: Animation;
 
   @ManyToOne(() => Color, (color) => color.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'color_id' })
   public color!: Color;
 
   @OneToMany(() => Template, (template) => template.live_streaming, {

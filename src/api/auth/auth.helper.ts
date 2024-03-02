@@ -29,15 +29,26 @@ export class AuthHelper {
 
   // Get User by User ID we get from decode()
   public async validateUser(decoced: any): Promise<any> {
-    const result = await this.repository.findOne({ where: { id: decoced.id } });
-    if (result.role === 'admin' || result.role === 'superadmin') {
+    const result = await this.repository.findOne({
+      relations: {
+        role: true
+      },
+      where: { id: decoced.id }
+    });
+    if (result.role.name === 'admin' || result.role.name === 'superadmin') {
       return result;
     }
   }
 
   // Generate JWT Token
-  public generateToken(user: User): string {
-    return this.jwt.sign({ id: user.id, email: user.email });
+  public generateToken(user: any): string {
+    console.log(user, '<<<<<<<<<');
+
+    return this.jwt.sign({
+      id: user.id,
+      email: user.email,
+      role: user.role.name
+    });
   }
 
   // Validate User's Password
@@ -62,5 +73,26 @@ export class AuthHelper {
       throw new UnauthorizedException();
     }
     return true;
+  }
+
+  public async phoneNumberFormat(phoneNumber: string) {
+    if (phoneNumber[0] !== '+') {
+      if (phoneNumber[0] === '0') {
+        const countryCode = phoneNumber.split('');
+        countryCode[0] = '+62';
+        phoneNumber = countryCode.join('');
+      }
+      if (phoneNumber.slice(0, 2) === '62') {
+        const countryCode = phoneNumber.split('');
+        countryCode.unshift('+');
+        phoneNumber = countryCode.join('');
+      }
+      if (phoneNumber.slice(0, 3) !== '+62') {
+        const countryCode = phoneNumber.split('');
+        countryCode.unshift('+62');
+        phoneNumber = countryCode.join('');
+      }
+    }
+    return phoneNumber;
   }
 }

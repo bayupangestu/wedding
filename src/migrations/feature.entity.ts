@@ -1,44 +1,29 @@
 import { Exclude } from 'class-transformer';
 import {
-  BaseEntity,
-  Column,
   Entity,
+  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  BaseEntity,
+  ManyToOne,
   OneToMany,
-  ManyToOne
+  JoinColumn
 } from 'typeorm';
-import { UserPackageTemplate } from './user_package_template.entity';
 import { PackageFeature } from './package_feature.entity';
 
 @Entity()
-export class Package extends BaseEntity {
+export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
   @Column({ type: 'varchar' })
   public name!: string;
 
-  @Column({ type: 'int' })
-  public price!: number;
-
-  @Column({ type: 'text' })
-  public description!: string;
-
-  @OneToMany(
-    () => UserPackageTemplate,
-    (user_package_template) => user_package_template.packages,
-    {
-      cascade: true
-    }
-  )
-  public user_package_template!: UserPackageTemplate[];
-
   @OneToMany(
     () => PackageFeature,
-    (package_feature) => package_feature.package,
+    (package_feature) => package_feature.feature,
     {
       cascade: true
     }
@@ -54,6 +39,6 @@ export class Package extends BaseEntity {
   public updated_at!: Date;
 
   @Exclude()
-  @DeleteDateColumn({ type: 'timestamp' })
-  public deleted_at!: Date;
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  public deleted_at!: Date | null;
 }

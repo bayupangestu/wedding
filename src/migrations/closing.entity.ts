@@ -28,37 +28,37 @@ export class Closing extends BaseEntity {
   @ManyToOne(() => ElementTop, (element_top) => element_top.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_top_id' })
   public element_top!: ElementTop;
 
   @ManyToOne(() => ElementBot, (element_bot) => element_bot.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_bot_id' })
   public element_bot!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'background_id' })
   public background!: Background;
 
   @ManyToOne(() => Frame, (frame) => frame.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'frame_id' })
   public frame!: Frame;
 
   @ManyToOne(() => Animation, (animation) => animation.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'animation_id' })
   public animation!: Animation;
 
   @ManyToOne(() => Color, (color) => color.closing, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'color_id' })
   public color!: Color;
 
   @OneToMany(() => Template, (template) => template.closing, {

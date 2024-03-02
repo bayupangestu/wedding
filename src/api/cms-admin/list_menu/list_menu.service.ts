@@ -3,15 +3,32 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { CreateListMenuDto, UpdateListMenuDto } from './list_menu.dto';
+import { RoleMenu } from '@/migrations/role_menu.entity';
 
 @Injectable()
 export class ListMenuService {
   @InjectRepository(ListMenuCms)
   private listMenuRepository: Repository<ListMenuCms>;
 
-  public async findAll(query: any): Promise<any> {
+  @InjectRepository(RoleMenu)
+  private roleMenuRepository: Repository<RoleMenu>;
+
+  public async findAll(query: any, req: any): Promise<any> {
     if (query.type === 'form') {
-      const result = await this.listMenuRepository.find();
+      const data = await this.roleMenuRepository.find({
+        relations: {
+          list_menu_cms: true,
+          role: true
+        },
+        where: {
+          role: {
+            id: req.user.role.id
+          }
+        }
+      });
+      const result = data.map((el) => {
+        return el.list_menu_cms;
+      });
       return {
         statusCode: 200,
         result
@@ -63,17 +80,57 @@ export class ListMenuService {
   }
 
   public async create(data: CreateListMenuDto): Promise<any> {
-    const result = await this.listMenuRepository.save(data);
-    return {
-      statusCode: 201,
-      message: 'List Menu created successfully'
-    };
+    const queryRunner =
+      this.listMenuRepository.manager.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.save(ListMenuCms, data);
+
+      if (data.role) {
+        data.role.forEach(async (el) => {
+          const roleMenu = new RoleMenu();
+          roleMenu.list_menu_cms = result.id;
+          roleMenu.role = el;
+          await queryRunner.manager.save(RoleMenu, roleMenu);
+        });
+      }
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return {
+        statusCode: 201,
+        message: 'List Menu created successfully'
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      return error;
+    }
   }
 
   public async update(id: number, data: UpdateListMenuDto): Promise<any> {
-    const result = await this.listMenuRepository.update(id, data);
-    if (result.affected === 0) {
+    const dataList = await this.listMenuRepository.findOne({
+      where: {
+        id
+      }
+    });
+    if (!dataList) {
       throw new HttpException('List Menu Not found', 404);
+    }
+    if (data.role) {
+      await this.roleMenuRepository.softDelete({
+        list_menu_cms: id
+      });
+      data.role.forEach(async (el) => {
+        const roleMenu = new RoleMenu();
+        roleMenu.list_menu_cms = id;
+        roleMenu.role = el;
+        await this.roleMenuRepository.save(roleMenu);
+      });
+    }
+    if (data.name) {
+      dataList.name = data.name;
+      await this.listMenuRepository.save(dataList);
     }
     return {
       statusCode: 200,

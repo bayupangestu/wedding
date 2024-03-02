@@ -32,19 +32,19 @@ export class UserPackageTemplate extends BaseEntity {
   @ManyToOne(() => User, (user) => user.user_package_template, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   public user!: User;
 
   @ManyToOne(() => Package, (packages) => packages.user_package_template, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'package_id' })
   public packages!: Package;
 
   @ManyToOne(() => Template, (template) => template.user_package_template, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'template_id' })
   public template!: Template;
 
   @Exclude()

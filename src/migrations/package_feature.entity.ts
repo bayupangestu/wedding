@@ -1,41 +1,35 @@
 import {
-  BaseEntity,
-  Column,
   Entity,
+  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
+  BaseEntity,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   JoinColumn
 } from 'typeorm';
-import { User } from './user.entity';
+import { Package } from './package.entity';
+import { Feature } from './feature.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity()
-export class BrideInfo extends BaseEntity {
+export class PackageFeature extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @OneToOne(() => User, {
+  @ManyToOne(() => Package, (packages) => packages.package_feature, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'user_id' })
-  public user!: User;
+  @JoinColumn({ name: 'package_id' })
+  public package!: any;
 
-  @Column({ type: 'varchar' })
-  public full_name!: string;
-
-  @Column({ type: 'json', nullable: true })
-  public social_media!: { instagram: string; tiktok: string };
-
-  @Column({ type: 'varchar' })
-  public bride_address!: string;
-
-  @Column({ type: 'json' })
-  public bride_parents!: { father: string; mother: string };
+  @ManyToOne(() => Feature, (features) => features.package_feature, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'feature_id' })
+  public feature!: Feature;
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

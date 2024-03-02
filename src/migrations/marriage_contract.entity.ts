@@ -12,14 +12,14 @@ import { User } from './user.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity()
-export class MarriageReception {
+export class MarriageContract {
   @PrimaryGeneratedColumn()
   public id!: number;
 
   @OneToOne(() => User, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   public user!: User;
 
   @Column({ type: 'varchar' })

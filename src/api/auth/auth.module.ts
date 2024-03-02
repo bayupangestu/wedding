@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './auth.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { Role } from '@/migrations/role.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         signOptions: { expiresIn: config.get('JWT_EXPIRES') }
       })
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role]),
     ThrottlerModule.forRoot([{ ttl: 5, limit: 10 }])
   ],
   controllers: [AuthController],
@@ -33,6 +34,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
       provide: APP_GUARD,
       useClass: ThrottlerGuard
     }
-  ]
+  ],
+  exports: [AuthHelper, AuthService]
 })
 export class AuthModule {}

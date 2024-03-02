@@ -28,37 +28,37 @@ export class Homepage extends BaseEntity {
   @ManyToOne(() => ElementTop, (element_top) => element_top.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_top_id' })
   public element_top!: ElementTop;
 
   @ManyToOne(() => ElementBot, (element_bot) => element_bot.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'element_bot_id' })
   public element_bot!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'background_id' })
   public background!: Background;
 
   @ManyToOne(() => Frame, (frame) => frame.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'frame_id' })
   public frame!: Frame;
 
   @ManyToOne(() => Animation, (animation) => animation.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'animation_id' })
   public animation!: Animation;
 
   @ManyToOne(() => Color, (color) => color.homepage, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'color_id' })
   public color!: Color;
 
   @OneToMany(() => Template, (template) => template.homepage, {
