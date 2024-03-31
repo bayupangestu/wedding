@@ -19,6 +19,7 @@ import { Frame } from './frame.entity';
 import { Animation } from './animation.entity';
 import { Color } from './color.entity';
 import { Template } from './template.entity';
+import { Font } from './font.entity';
 
 @Entity()
 export class GiftCorner extends BaseEntity {
@@ -60,6 +61,12 @@ export class GiftCorner extends BaseEntity {
   })
   @JoinColumn({ name: 'color_id' })
   public color!: Color;
+
+  @ManyToOne(() => Font, (font) => font.gift_corner, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'font_id' })
+  public font!: Font;
 
   @OneToMany(() => Template, (template) => template.gift_corner, {
     cascade: true

@@ -29,7 +29,7 @@ export class PackageFeature extends BaseEntity {
     onDelete: 'CASCADE'
   })
   @JoinColumn({ name: 'feature_id' })
-  public feature!: Feature;
+  public feature!: any;
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

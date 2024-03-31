@@ -19,6 +19,7 @@ import { Frame } from './frame.entity';
 import { Animation } from './animation.entity';
 import { Color } from './color.entity';
 import { Template } from './template.entity';
+import { Font } from './font.entity';
 
 @Entity()
 export class Opening extends BaseEntity {
@@ -65,6 +66,12 @@ export class Opening extends BaseEntity {
     cascade: true
   })
   public template!: Template[];
+
+  @ManyToOne(() => Font, (font) => font.opening, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'font_id' })
+  public font!: Font;
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

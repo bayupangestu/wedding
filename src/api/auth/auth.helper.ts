@@ -42,8 +42,6 @@ export class AuthHelper {
 
   // Generate JWT Token
   public generateToken(user: any): string {
-    console.log(user, '<<<<<<<<<');
-
     return this.jwt.sign({
       id: user.id,
       email: user.email,

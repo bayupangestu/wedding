@@ -9,8 +9,8 @@ import {
   OneToMany
 } from 'typeorm';
 
-import { Exclude } from 'class-transformer';
 import { Homepage } from './homepage.entity';
+import { Exclude } from 'class-transformer';
 import { Opening } from './opening.entity';
 import { BrideGroom } from './bride_groom.entity';
 import { VenueDate } from './venue_date.entity';
@@ -23,71 +23,64 @@ import { Wishlist } from './wishlist.entity';
 import { Closing } from './closing.entity';
 
 @Entity()
-export class ElementBot extends BaseEntity {
+export class Font extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'json' })
   public name!: string;
 
-  @Column({ type: 'text' })
-  public asset!: string;
-
-  @OneToMany(() => Homepage, (homepage) => homepage.element_bot, {
+  @OneToMany(() => Homepage, (homepage) => homepage.font, {
     cascade: true
   })
   public homepage!: Homepage[];
 
-  @OneToMany(() => Opening, (opening) => opening.element_bot, {
+  @OneToMany(() => Opening, (opening) => opening.font, {
     cascade: true
   })
   public opening!: Opening[];
 
-  @OneToMany(() => BrideGroom, (bride_groom) => bride_groom.element_bot, {
+  @OneToMany(() => BrideGroom, (bride_groom) => bride_groom.font, {
     cascade: true
   })
   public bride_groom!: BrideGroom[];
 
-  @OneToMany(() => VenueDate, (venue_date) => venue_date.element_bot, {
+  @OneToMany(() => VenueDate, (venue_date) => venue_date.font, {
     cascade: true
   })
   public venue_date!: VenueDate[];
 
-  @OneToMany(() => Gallery, (gallery) => gallery.element_bot, {
+  @OneToMany(() => Gallery, (gallery) => gallery.font, {
     cascade: true
   })
   public gallery!: Gallery[];
 
-  @OneToMany(() => LoveStory, (love_story) => love_story.element_bot, {
+  @OneToMany(() => LoveStory, (love_story) => love_story.font, {
     cascade: true
   })
   public love_story!: LoveStory[];
 
-  @OneToMany(
-    () => LiveStreaming,
-    (live_streaming) => live_streaming.element_bot,
-    {
-      cascade: true
-    }
-  )
+  @OneToMany(() => LiveStreaming, (live_streaming) => live_streaming.font, {
+    cascade: true
+  })
   public live_streaming!: LiveStreaming[];
 
-  @OneToMany(() => Rsvp, (rsvp) => rsvp.element_bot, {
+  @OneToMany(() => Rsvp, (rsvp) => rsvp.font, {
     cascade: true
   })
   public rsvp!: Rsvp[];
 
-  @OneToMany(() => GiftCorner, (gift_corner) => gift_corner.element_bot, {
+  @OneToMany(() => GiftCorner, (gift_corner) => gift_corner.font, {
     cascade: true
   })
   public gift_corner!: GiftCorner[];
 
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.element_bot, {
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.font, {
     cascade: true
   })
   public wishlist!: Wishlist[];
 
-  @OneToMany(() => Closing, (closing) => closing.element_bot, {
+  @OneToMany(() => Closing, (closing) => closing.font, {
     cascade: true
   })
   public closing!: Closing[];

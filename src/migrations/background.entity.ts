@@ -29,6 +29,9 @@ export class Background extends BaseEntity {
   @Column({ type: 'varchar' })
   public name!: string;
 
+  @Column({ type: 'text' })
+  public asset!: string;
+
   @OneToMany(() => Homepage, (homepage) => homepage.background, {
     cascade: true
   })

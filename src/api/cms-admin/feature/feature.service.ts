@@ -43,9 +43,11 @@ export class FeatureService {
         };
       }
       const [result, total] = await this.featureRepository.findAndCount(option);
+      const totalPage = Math.ceil(total / query.pageSize);
       return {
         statusCode: 200,
         total,
+        totalPage,
         page: query.page,
         pageSize: query.pageSize,
         result

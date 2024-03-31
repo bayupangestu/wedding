@@ -30,6 +30,9 @@ export class ElementTop extends BaseEntity {
   @Column({ type: 'varchar' })
   public name!: string;
 
+  @Column({ type: 'text' })
+  public asset!: string;
+
   @OneToMany(() => Homepage, (homepage) => homepage.element_top, {
     cascade: true
   })

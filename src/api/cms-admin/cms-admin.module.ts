@@ -8,9 +8,11 @@ import { RoleModule } from './role/role.module';
 import { ClientModule } from './client/client.module';
 import { FeatureModule } from './feature/feature.module';
 import { PackageFeatureModule } from './package_feature/package_feature.module';
+import { ElementModule } from './element/element.module';
+import { CustomTemplateModule } from './custom-template/custom-template.module';
 
 @Module({
-  imports: [PackageModule, ThrottlerModule.forRoot([{ ttl: 5, limit: 10 }]), BankModule, ListMenuModule, RoleModule, ClientModule, FeatureModule, PackageFeatureModule],
+  imports: [PackageModule, ThrottlerModule.forRoot([{ ttl: 5, limit: 10 }]), BankModule, ListMenuModule, RoleModule, ClientModule, FeatureModule, PackageFeatureModule, ElementModule, CustomTemplateModule],
   providers: [
     {
       provide: APP_GUARD,

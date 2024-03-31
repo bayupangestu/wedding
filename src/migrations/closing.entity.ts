@@ -19,6 +19,7 @@ import { Frame } from './frame.entity';
 import { Animation } from './animation.entity';
 import { Color } from './color.entity';
 import { Template } from './template.entity';
+import { Font } from './font.entity';
 
 @Entity()
 export class Closing extends BaseEntity {
@@ -60,6 +61,12 @@ export class Closing extends BaseEntity {
   })
   @JoinColumn({ name: 'color_id' })
   public color!: Color;
+
+  @ManyToOne(() => Font, (font) => font.closing, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'font_id' })
+  public font!: Font;
 
   @OneToMany(() => Template, (template) => template.closing, {
     onDelete: 'CASCADE'

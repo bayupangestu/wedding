@@ -54,9 +54,11 @@ export class ListMenuService {
       const [result, total] = await this.listMenuRepository.findAndCount(
         option
       );
+      const totalPage = Math.ceil(total / query.pageSize);
       return {
         statusCode: 200,
         total,
+        totalPage,
         page: query.page,
         pageSize: query.pageSize,
         result

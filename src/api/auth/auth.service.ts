@@ -32,7 +32,7 @@ export class AuthService {
     }
 
     user.name = body.name;
-    user.email = body.email;
+    user.email = body.email.toLowerCase();
     user.password = this.helper.encodePassword(body.password);
     user.role = role;
 
@@ -40,39 +40,34 @@ export class AuthService {
   }
 
   public async login(body: any): Promise<string | never> {
-    try {
-      const { email, password }: any = body;
-      const user: User = await this.repository.findOne({
-        relations: {
-          role: true
-        },
-        where: { email }
-      });
+    const { email, password }: any = body;
+    const user: User = await this.repository.findOne({
+      relations: {
+        role: true
+      },
+      where: { email: email.toLowerCase() }
+    });
 
-      if (!user) {
-        throw new HttpException('No user found', HttpStatus.NOT_FOUND);
-      }
-
-      const isPasswordValid: boolean = this.helper.isPasswordValid(
-        password,
-        user.password
-      );
-
-      if (!isPasswordValid) {
-        throw new HttpException('No user found', HttpStatus.NOT_FOUND);
-      }
-      console.log(user, '>>>>>>');
-
-      this.repository.update(user.id, { lastLoginAt: new Date() });
-      const result: any = {
-        token: this.helper.generateToken(user)
-      };
-      return result;
-    } catch (error) {
-      console.log(error, '!!!!!');
-
-      return error;
+    if (!user) {
+      throw new HttpException('No user found', 401);
     }
+
+    const isPasswordValid: boolean = this.helper.isPasswordValid(
+      password,
+      user.password
+    );
+
+    if (!isPasswordValid) {
+      throw new HttpException('No user found', 401);
+    }
+
+    this.repository.update(user.id, { lastLoginAt: new Date() });
+    const result: any = {
+      status_code: 200,
+      token: this.helper.generateToken(user)
+    };
+
+    return result;
   }
 
   public async refresh(user: User): Promise<string> {
