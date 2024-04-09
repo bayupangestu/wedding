@@ -14,6 +14,7 @@ import { Rsvp } from '@/migrations/rsvp.entity';
 import { GiftCorner } from '@/migrations/gift_corner.entity';
 import { Wishlist } from '@/migrations/wishlist.entity';
 import { Closing } from '@/migrations/closing.entity';
+import { Template } from '@/migrations/template.entity';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { Closing } from '@/migrations/closing.entity';
       Rsvp,
       GiftCorner,
       Wishlist,
-      Closing
+      Closing,
+      Template
     ]),
     AuthModule
   ],

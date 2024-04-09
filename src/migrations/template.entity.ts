@@ -8,7 +8,8 @@ import {
   BaseEntity,
   ManyToOne,
   OneToMany,
-  JoinColumn
+  JoinColumn,
+  OneToOne
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
@@ -24,6 +25,7 @@ import { GiftCorner } from './gift_corner.entity';
 import { Wishlist } from './wishlist.entity';
 import { Closing } from './closing.entity';
 import { UserPackageTemplate } from './user_package_template.entity';
+import { CustomPageOrder } from './custom_page_order.entity';
 
 // id
 // template_name
@@ -124,6 +126,12 @@ export class Template extends BaseEntity {
     }
   )
   public user_package_template!: UserPackageTemplate[];
+
+  @OneToOne(() => CustomPageOrder, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'custom_page_order_id' })
+  public custom_page_order!: CustomPageOrder;
 
   @Exclude()
   @CreateDateColumn()

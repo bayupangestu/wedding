@@ -26,17 +26,29 @@ export class Closing extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @ManyToOne(() => ElementTop, (element_top) => element_top.closing, {
+  @ManyToOne(() => ElementTop, (element_top) => element_top.closing_left, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_top_id' })
-  public element_top!: ElementTop;
+  @JoinColumn({ name: 'element_top_left_id' })
+  public element_top_left!: ElementTop;
 
-  @ManyToOne(() => ElementBot, (element_bot) => element_bot.closing, {
+  @ManyToOne(() => ElementTop, (element_top) => element_top.closing_right, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_bot_id' })
-  public element_bot!: ElementBot;
+  @JoinColumn({ name: 'element_top_right_id' })
+  public element_top_right!: ElementTop;
+
+  @ManyToOne(() => ElementBot, (element_bot) => element_bot.closing_left, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'element_bot_left_id' })
+  public element_bot_left!: ElementBot;
+
+  @ManyToOne(() => ElementBot, (element_bot) => element_bot.closing_right, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'element_bot_right_id' })
+  public element_bot_right!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.closing, {
     onDelete: 'CASCADE'

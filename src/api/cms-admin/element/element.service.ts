@@ -34,29 +34,26 @@ export class ElementService {
   @InjectRepository(Font)
   private readonly fontRepository: Repository<Font>;
 
-  public async create(body: CreateElementDto, file: any): Promise<any> {
-    if (body.element === 'element-bot') {
-      return await this.createElementBot(body, file);
-    } else if (body.element === 'element-top') {
-      return await this.createElementTop(body, file);
-    } else if (body.element === 'background') {
-      return await this.createBackground(body, file);
-    } else if (body.element === 'color') {
-      return await this.createColor(body);
-    } else if (body.element === 'animation') {
-      return await this.createAnimation(body);
-    } else if (body.element === 'frame') {
-      return await this.createFrame(body, file);
-    } else if (body.element === 'font') {
-      return await this.createFont(body);
+  public async create(body: any, file: any): Promise<any> {
+    switch (body.element) {
+      case 'element-bot':
+        return await this.createElementBot(body, file);
+      case 'element-top':
+        return await this.createElementTop(body, file);
+      case 'background':
+        return await this.createBackground(body, file);
+      case 'color':
+        return await this.createColor(body);
+      case 'animation':
+        return await this.createAnimation(body);
+      case 'frame':
+        return await this.createFrame(body, file);
+      case 'font':
+        return await this.createFont(body);
     }
   }
 
-  public async update(
-    id: number,
-    body: UpdateElementDto,
-    file: any
-  ): Promise<any> {
+  public async update(id: number, body: any, file: any): Promise<any> {
     if (body.element === 'element-bot') {
       return await this.updateElementBot(id, body, file);
     } else if (body.element === 'element-top') {
@@ -93,20 +90,25 @@ export class ElementService {
   }
 
   public async findAll(query: any): Promise<any> {
-    if (query.element === 'element-bot') {
-      return await this.findAllBotElement(query);
-    } else if (query.element === 'element-top') {
-      return await this.findAllTopElement(query);
-    } else if (query.element === 'background') {
-      return await this.findAllBackground(query);
-    } else if (query.element === 'color') {
-      return await this.findAllColor(query);
-    } else if (query.element === 'animation') {
-      return await this.findAllAnimation(query);
-    } else if (query.element === 'frame') {
-      return await this.findAllFrame(query);
-    } else if (query.element === 'font') {
-      return await this.findAllFont(query);
+    switch (query.element) {
+      case 'element-bot-right':
+        return await this.findAllBotElementRight(query);
+      case 'element-bot-left':
+        return await this.findAllBotElementLeft(query);
+      case 'element-top-right':
+        return await this.findAllTopElementRight(query);
+      case 'element-top-left':
+        return await this.findAllTopElementLeft(query);
+      case 'background':
+        return await this.findAllBackground(query);
+      case 'color':
+        return await this.findAllColor(query);
+      case 'animation':
+        return await this.findAllAnimation(query);
+      case 'frame':
+        return await this.findAllFrame(query);
+      case 'font':
+        return await this.findAllFont(query);
     }
   }
 
@@ -128,9 +130,13 @@ export class ElementService {
     }
   }
 
-  private async findAllBotElement(query: any): Promise<any> {
+  private async findAllBotElementRight(query: any): Promise<any> {
     if (query.type === 'form') {
-      const result = await this.elementBotRepository.find();
+      const result = await this.elementBotRepository.find({
+        where: {
+          element_bot_type: 'right'
+        }
+      });
       return {
         statusCode: 200,
         result
@@ -146,7 +152,53 @@ export class ElementService {
         order: {
           created_at: 'DESC'
         },
-        where: {}
+        where: {
+          element_bot_type: 'right'
+        }
+      };
+      if (query.search) {
+        option.where = {
+          name: ILike(`%${query.search}%`)
+        };
+      }
+      const [result, total] = await this.elementBotRepository.findAndCount(
+        option
+      );
+      return {
+        statusCode: 200,
+        total,
+        page: query.page,
+        pageSize: query.pageSize,
+        result
+      };
+    }
+  }
+
+  private async findAllBotElementLeft(query: any): Promise<any> {
+    if (query.type === 'form') {
+      const result = await this.elementBotRepository.find({
+        where: {
+          element_bot_type: 'left'
+        }
+      });
+      return {
+        statusCode: 200,
+        result
+      };
+    } else {
+      query.page = query.page || 1;
+      query.pageSize = query.pageSize || 10;
+
+      const skip = (query.page - 1) * query.pageSize;
+      const option: any = {
+        skip: skip,
+        take: query.pageSize,
+        order: {
+          created_at: 'DESC'
+        },
+        where: {
+          element_bot_type: 'left'
+        }
       };
       if (query.search) {
         option.where = {
@@ -181,9 +233,13 @@ export class ElementService {
     };
   }
 
-  private async findAllTopElement(query: any): Promise<any> {
+  private async findAllTopElementRight(query: any): Promise<any> {
     if (query.type === 'form') {
-      const result = await this.elementTopRepository.find();
+      const result = await this.elementTopRepository.find({
+        where: {
+          element_top_type: 'right'
+        }
+      });
       return {
         statusCode: 200,
         result
@@ -199,7 +255,53 @@ export class ElementService {
         order: {
           created_at: 'DESC'
         },
-        where: {}
+        where: {
+          element_top_type: 'right'
+        }
+      };
+      if (query.search) {
+        option.where = {
+          name: ILike(`%${query.search}%`)
+        };
+      }
+      const [result, total] = await this.elementTopRepository.findAndCount(
+        option
+      );
+      return {
+        statusCode: 200,
+        total,
+        page: query.page,
+        pageSize: query.pageSize,
+        result
+      };
+    }
+  }
+
+  private async findAllTopElementLeft(query: any): Promise<any> {
+    if (query.type === 'form') {
+      const result = await this.elementTopRepository.find({
+        where: {
+          element_top_type: 'left'
+        }
+      });
+      return {
+        statusCode: 200,
+        result
+      };
+    } else {
+      query.page = query.page || 1;
+      query.pageSize = query.pageSize || 10;
+
+      const skip = (query.page - 1) * query.pageSize;
+      const option: any = {
+        skip: skip,
+        take: query.pageSize,
+        order: {
+          created_at: 'DESC'
+        },
+        where: {
+          element_top_type: 'left'
+        }
       };
       if (query.search) {
         option.where = {
@@ -493,25 +595,34 @@ export class ElementService {
     };
   }
 
-  private async createElementBot(body: CreateElementDto, file: any) {
-    const bitmap = fs.readFileSync(file.path);
-    const asset = Buffer.from(bitmap).toString('base64');
-    const elementBot = new ElementBot();
-    elementBot.name = body.name;
-    elementBot.asset = asset;
-    await this.elementBotRepository.save(elementBot);
-    return {
-      statusCode: 201,
-      message: 'Element Bot Created'
-    };
+  private async createElementBot(body: any, file: any) {
+    try {
+      const bitmap = fs.readFileSync(file.path);
+      const asset = Buffer.from(bitmap).toString('base64');
+      const elementBot = new ElementBot();
+
+      elementBot.element_bot_name = body.element_bot_name;
+      elementBot.element_bot_type = body.element_bot_type;
+      elementBot.element_bot_asset = asset;
+
+      await this.elementBotRepository.save(elementBot);
+      return {
+        statusCode: 201,
+        message: 'Element Bot Created'
+      };
+    } catch (error) {
+      // console.log(error, '!!!');
+      return error;
+    }
   }
 
-  private async createElementTop(body: CreateElementDto, file: any) {
+  private async createElementTop(body: any, file: any) {
     const bitmap = fs.readFileSync(file.path);
     const asset = Buffer.from(bitmap).toString('base64');
     const elementTop = new ElementTop();
-    elementTop.name = body.name;
-    elementTop.asset = asset;
+    elementTop.element_top_name = body.element_top_name;
+    elementTop.element_top_asset = asset;
+    elementTop.element_top_type = body.element_top_type;
     await this.elementTopRepository.save(elementTop);
     return {
       statusCode: 201,
@@ -519,12 +630,12 @@ export class ElementService {
     };
   }
 
-  private async createBackground(body: CreateElementDto, file: any) {
+  private async createBackground(body: any, file: any) {
     const bitmap = fs.readFileSync(file.path);
     const asset = Buffer.from(bitmap).toString('base64');
     const background = new Background();
-    background.name = body.name;
-    background.asset = asset;
+    background.backgorund_name = body.background_name;
+    background.background_asset = asset;
     await this.backgroundRepository.save(background);
     return {
       statusCode: 201,
@@ -532,9 +643,9 @@ export class ElementService {
     };
   }
 
-  private async createColor(body: CreateElementDto) {
+  private async createColor(body: any) {
     const color = new Color();
-    color.name = body.name;
+    color.color_name = body.color_name;
     await this.colorRepository.save(color);
     return {
       statusCode: 201,
@@ -542,9 +653,9 @@ export class ElementService {
     };
   }
 
-  private async createAnimation(body: CreateElementDto) {
+  private async createAnimation(body: any) {
     const animation = new Animation();
-    animation.name = body.name;
+    animation.animation_name = body.animation_name;
     await this.animationRepository.save(animation);
     return {
       statusCode: 201,
@@ -552,12 +663,12 @@ export class ElementService {
     };
   }
 
-  private async createFrame(body: CreateElementDto, file: any) {
-    const bitmap = fs.readFileSync(file.path);
-    const asset = Buffer.from(bitmap).toString('base64');
+  private async createFrame(body: any, file: any) {
+    // const bitmap = fs.readFileSync(file.path);
+    // const asset = Buffer.from(bitmap).toString('base64');
     const frame = new Frame();
-    frame.name = body.name;
-    frame.asset = asset;
+    frame.frame_name = body.frame_name;
+    // frame.asset = asset;
     await this.frameRepository.save(frame);
     return {
       statusCode: 201,
@@ -565,10 +676,17 @@ export class ElementService {
     };
   }
 
-  private async createFont(body: CreateElementDto) {
+  private async createFont(body: any) {
+    if (typeof body.name === 'string') {
+      body.name = JSON.parse(body.name);
+    }
+
     const font = new Font();
-    font.name = body.name;
+    font.font_name = body.font_name;
+    font.font_size = body.font_size;
+    font.font_type = body.font_type;
     await this.fontRepository.save(font);
+
     return {
       statusCode: 201,
       message: 'Font Created'
@@ -584,12 +702,15 @@ export class ElementService {
     if (!elementBot) {
       throw new HttpException('Element Bot Not found', 404);
     }
-    if (body.name) {
-      elementBot.name = body.name;
+    if (body.element_bot_name) {
+      elementBot.element_bot_name = body.element_bot_name;
     }
     if (file) {
       const bitmap = fs.readFileSync(file);
-      elementBot.asset = Buffer.from(bitmap).toString('base64');
+      elementBot.element_bot_asset = Buffer.from(bitmap).toString('base64');
+    }
+    if (file) {
+      elementBot.element_bot_type = body.elemenet_bot_type;
     }
     await this.elementBotRepository.update(id, elementBot);
     return {
@@ -607,12 +728,15 @@ export class ElementService {
     if (!elementTop) {
       throw new HttpException('Element Top Not found', 404);
     }
-    if (body.name) {
-      elementTop.name = body.name;
+    if (body.element_top_name) {
+      elementTop.element_top_name = body.element_top_name;
     }
     if (file) {
       const bitmap = fs.readFileSync(file);
-      elementTop.asset = Buffer.from(bitmap).toString('base64');
+      elementTop.element_top_asset = Buffer.from(bitmap).toString('base64');
+    }
+    if (body.element_top_type) {
+      elementTop.element_top_type = body.element_top_type;
     }
     await this.elementTopRepository.update(id, elementTop);
     return {
@@ -630,12 +754,12 @@ export class ElementService {
     if (!background) {
       throw new HttpException('Background Not found', 404);
     }
-    if (body.name) {
-      background.name = body.name;
+    if (body.background_name) {
+      background.backgorund_name = body.background_name;
     }
     if (file) {
       const bitmap = fs.readFileSync(file);
-      background.asset = Buffer.from(bitmap).toString('base64');
+      background.background_asset = Buffer.from(bitmap).toString('base64');
     }
     await this.backgroundRepository.update(id, background);
     return {
@@ -654,7 +778,7 @@ export class ElementService {
       throw new HttpException('Color Not found', 404);
     }
 
-    color.name = body.name;
+    color.color_name = body.color_name;
 
     await this.colorRepository.update(id, color);
     return {
@@ -673,7 +797,7 @@ export class ElementService {
       throw new HttpException('Animation Not found', 404);
     }
 
-    animation.name = body.name;
+    animation.animation_name = body.animation_name;
 
     await this.animationRepository.update(id, animation);
     return {
@@ -692,7 +816,7 @@ export class ElementService {
       throw new HttpException('Frame Not found', 404);
     }
     if (body.name) {
-      frame.name = body.name;
+      frame.frame_name = body.frame_name;
     }
     if (file) {
       const bitmap = fs.readFileSync(file);
@@ -715,7 +839,9 @@ export class ElementService {
       throw new HttpException('Font Not found', 404);
     }
 
-    font.name = body.name;
+    font.font_name = body.font_name;
+    font.font_size = body.font_size;
+    font.font_type = body.font_type;
 
     await this.fontRepository.update(id, font);
     return {

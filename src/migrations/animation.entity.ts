@@ -26,8 +26,8 @@ export class Animation extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column({ type: 'varchar' })
-  public name!: string;
+  @Column({ type: 'text' })
+  public animation_name!: string;
 
   @OneToMany(() => Homepage, (homepage) => homepage.animation, {
     cascade: true

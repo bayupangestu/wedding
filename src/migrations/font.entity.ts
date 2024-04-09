@@ -27,8 +27,14 @@ export class Font extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column({ type: 'json' })
-  public name!: string;
+  @Column({ type: 'varchar' })
+  public font_name!: string;
+
+  @Column({ type: 'varchar' })
+  public font_size!: string;
+
+  @Column({ type: 'varchar' })
+  public font_type!: string;
 
   @OneToMany(() => Homepage, (homepage) => homepage.font, {
     cascade: true

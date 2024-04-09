@@ -26,17 +26,29 @@ export class Rsvp extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @ManyToOne(() => ElementTop, (element_top) => element_top.rsvp, {
+  @ManyToOne(() => ElementTop, (element_top) => element_top.rsvp_left, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_top_id' })
-  public element_top!: ElementTop;
+  @JoinColumn({ name: 'element_top_left_id' })
+  public element_top_left!: ElementTop;
 
-  @ManyToOne(() => ElementBot, (element_bot) => element_bot.rsvp, {
+  @ManyToOne(() => ElementTop, (element_top) => element_top.rsvp_right, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_bot_id' })
-  public element_bot!: ElementBot;
+  @JoinColumn({ name: 'element_top_right_id' })
+  public element_top_right!: ElementTop;
+
+  @ManyToOne(() => ElementBot, (element_bot) => element_bot.rsvp_right, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'element_bot_right_id' })
+  public element_bot_right!: ElementBot;
+
+  @ManyToOne(() => ElementBot, (element_bot) => element_bot.rsvp_left, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'element_bot_left_id' })
+  public element_bot_left!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.rsvp, {
     onDelete: 'CASCADE'

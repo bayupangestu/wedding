@@ -16,14 +16,6 @@ import { User } from './user.entity';
 import { Package } from './package.entity';
 import { Template } from './template.entity';
 
-// id;
-// user_id;
-// service_id;
-// template_id;
-// created_at;
-// updated_at;
-// deleted_at;
-
 @Entity()
 export class UserPackageTemplate extends BaseEntity {
   @PrimaryGeneratedColumn()

@@ -28,69 +28,131 @@ export class ElementTop extends BaseEntity {
   public id!: number;
 
   @Column({ type: 'varchar' })
-  public name!: string;
+  public element_top_name!: string;
 
   @Column({ type: 'text' })
-  public asset!: string;
+  public element_top_asset!: string;
 
-  @OneToMany(() => Homepage, (homepage) => homepage.element_top, {
+  @Column({ type: 'varchar' })
+  public element_top_type!: string;
+
+  @OneToMany(() => Homepage, (homepage) => homepage.element_top_right, {
     cascade: true
   })
-  public homepage!: Homepage[];
+  public homepage_right!: Homepage[];
 
-  @OneToMany(() => Opening, (opening) => opening.element_top, {
+  @OneToMany(() => Homepage, (homepage) => homepage.element_top_left, {
     cascade: true
   })
-  public opening!: Opening[];
+  public homepage_left!: Homepage[];
 
-  @OneToMany(() => BrideGroom, (bride_groom) => bride_groom.element_top, {
+  @OneToMany(() => Opening, (opening) => opening.element_top_left, {
     cascade: true
   })
-  public bride_groom!: BrideGroom[];
+  public opening_left!: Opening[];
 
-  @OneToMany(() => VenueDate, (venue_date) => venue_date.element_top, {
+  @OneToMany(() => Opening, (opening) => opening.element_top_right, {
     cascade: true
   })
-  public venue_date!: VenueDate[];
+  public opening_right!: Opening[];
 
-  @OneToMany(() => Gallery, (gallery) => gallery.element_top, {
+  @OneToMany(() => BrideGroom, (bride_groom) => bride_groom.element_top_left, {
     cascade: true
   })
-  public gallery!: Gallery[];
+  public bride_groom_left!: BrideGroom[];
 
-  @OneToMany(() => LoveStory, (love_story) => love_story.element_top, {
+  @OneToMany(() => BrideGroom, (bride_groom) => bride_groom.element_top_right, {
     cascade: true
   })
-  public love_story!: LoveStory[];
+  public bride_groom_right!: BrideGroom[];
+
+  @OneToMany(() => VenueDate, (venue_date) => venue_date.element_top_left, {
+    cascade: true
+  })
+  public venue_date_left!: VenueDate[];
+
+  @OneToMany(() => VenueDate, (venue_date) => venue_date.element_top_right, {
+    cascade: true
+  })
+  public venue_date_right!: VenueDate[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.element_top_left, {
+    cascade: true
+  })
+  public gallery_left!: Gallery[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.element_top_right, {
+    cascade: true
+  })
+  public gallery_right!: Gallery[];
+
+  @OneToMany(() => LoveStory, (love_story) => love_story.element_top_left, {
+    cascade: true
+  })
+  public love_story_left!: LoveStory[];
+
+  @OneToMany(() => LoveStory, (love_story) => love_story.element_top_right, {
+    cascade: true
+  })
+  public love_story_right!: LoveStory[];
 
   @OneToMany(
     () => LiveStreaming,
-    (live_streaming) => live_streaming.element_top,
+    (live_streaming) => live_streaming.element_top_right,
     {
       cascade: true
     }
   )
-  public live_streaming!: LiveStreaming[];
+  public live_streaming_right!: LiveStreaming[];
 
-  @OneToMany(() => Rsvp, (rsvp) => rsvp.element_top, {
+  @OneToMany(
+    () => LiveStreaming,
+    (live_streaming) => live_streaming.element_top_left,
+    {
+      cascade: true
+    }
+  )
+  public live_streaming_left!: LiveStreaming[];
+
+  @OneToMany(() => Rsvp, (rsvp) => rsvp.element_top_left, {
     cascade: true
   })
-  public rsvp!: Rsvp[];
+  public rsvp_left!: Rsvp[];
 
-  @OneToMany(() => GiftCorner, (gift_corner) => gift_corner.element_top, {
+  @OneToMany(() => Rsvp, (rsvp) => rsvp.element_top_right, {
     cascade: true
   })
-  public gift_corner!: GiftCorner[];
+  public rsvp_right!: Rsvp[];
 
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.element_top, {
+  @OneToMany(() => GiftCorner, (gift_corner) => gift_corner.element_top_left, {
     cascade: true
   })
-  public wishlist!: Wishlist[];
+  public gift_corner_left!: GiftCorner[];
 
-  @OneToMany(() => Closing, (closing) => closing.element_top, {
+  @OneToMany(() => GiftCorner, (gift_corner) => gift_corner.element_top_right, {
     cascade: true
   })
-  public closing!: Closing[];
+  public gift_corner_right!: GiftCorner[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.element_top_right, {
+    cascade: true
+  })
+  public wishlist_right!: Wishlist[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.element_top_left, {
+    cascade: true
+  })
+  public wishlist_left!: Wishlist[];
+
+  @OneToMany(() => Closing, (closing) => closing.element_top_left, {
+    cascade: true
+  })
+  public closing_left!: Closing[];
+
+  @OneToMany(() => Closing, (closing) => closing.element_top_right, {
+    cascade: true
+  })
+  public closing_right!: Closing[];
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

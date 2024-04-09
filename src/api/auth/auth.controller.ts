@@ -13,7 +13,7 @@ import { User } from '@/migrations/user.entity';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { Request } from 'express';
-import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+// import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
