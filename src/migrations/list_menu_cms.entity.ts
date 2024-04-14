@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  BaseEntity
+  BaseEntity,
+  OneToMany
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
+import { RoleMenu } from './role_menu.entity';
 
 @Entity()
 export class ListMenuCms extends BaseEntity {
@@ -17,6 +19,17 @@ export class ListMenuCms extends BaseEntity {
 
   @Column({ type: 'varchar' })
   public name!: string;
+
+  @Column({ type: 'text', nullable: true })
+  public icon!: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  public path!: string;
+
+  @OneToMany(() => RoleMenu, (role_menu) => role_menu.list_menu_cms, {
+    cascade: true
+  })
+  public role_menu!: RoleMenu[];
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

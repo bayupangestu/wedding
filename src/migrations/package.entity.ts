@@ -11,6 +11,7 @@ import {
   ManyToOne
 } from 'typeorm';
 import { UserPackageTemplate } from './user_package_template.entity';
+import { PackageFeature } from './package_feature.entity';
 
 @Entity()
 export class Package extends BaseEntity {
@@ -34,6 +35,15 @@ export class Package extends BaseEntity {
     }
   )
   public user_package_template!: UserPackageTemplate[];
+
+  @OneToMany(
+    () => PackageFeature,
+    (package_feature) => package_feature.package,
+    {
+      cascade: true
+    }
+  )
+  public package_feature!: PackageFeature[];
 
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })

@@ -31,7 +31,7 @@ export class GroomInfo extends BaseEntity {
   @OneToOne(() => User, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   public user!: User;
 
   @Column({ type: 'varchar' })

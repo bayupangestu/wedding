@@ -27,7 +27,7 @@ export class Color extends BaseEntity {
   public id!: number;
 
   @Column({ type: 'varchar' })
-  public name!: string;
+  public color_name!: string;
 
   @OneToMany(() => Homepage, (homepage) => homepage.color, {
     cascade: true

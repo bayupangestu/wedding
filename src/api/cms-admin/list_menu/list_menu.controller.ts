@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors
@@ -25,8 +26,8 @@ export class ListMenuController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  public async findAll(@Query() query: any): Promise<any> {
-    return this.listMenuService.findAll(query);
+  public async findAll(@Query() query: any, @Req() req: any): Promise<any> {
+    return this.listMenuService.findAll(query, req);
   }
 
   @Get(':id')

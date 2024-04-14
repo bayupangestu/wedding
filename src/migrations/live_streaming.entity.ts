@@ -19,47 +19,82 @@ import { Frame } from './frame.entity';
 import { Animation } from './animation.entity';
 import { Color } from './color.entity';
 import { Template } from './template.entity';
+import { Font } from './font.entity';
 
 @Entity()
 export class LiveStreaming extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @ManyToOne(() => ElementTop, (element_top) => element_top.live_streaming, {
-    onDelete: 'CASCADE'
-  })
-  @JoinColumn()
-  public element_top!: ElementTop;
+  @ManyToOne(
+    () => ElementTop,
+    (element_top) => element_top.live_streaming_left,
+    {
+      onDelete: 'CASCADE'
+    }
+  )
+  @JoinColumn({ name: 'element_top_left_id' })
+  public element_top_left!: ElementTop;
 
-  @ManyToOne(() => ElementBot, (element_bot) => element_bot.live_streaming, {
-    onDelete: 'CASCADE'
-  })
-  @JoinColumn()
-  public element_bot!: ElementBot;
+  @ManyToOne(
+    () => ElementTop,
+    (element_top) => element_top.live_streaming_right,
+    {
+      onDelete: 'CASCADE'
+    }
+  )
+  @JoinColumn({ name: 'element_top_right_id' })
+  public element_top_right!: ElementTop;
+
+  @ManyToOne(
+    () => ElementBot,
+    (element_bot) => element_bot.live_streaming_right,
+    {
+      onDelete: 'CASCADE'
+    }
+  )
+  @JoinColumn({ name: 'element_bot_right_id' })
+  public element_bot_right!: ElementBot;
+
+  @ManyToOne(
+    () => ElementBot,
+    (element_bot) => element_bot.live_streaming_left,
+    {
+      onDelete: 'CASCADE'
+    }
+  )
+  @JoinColumn({ name: 'element_bot_left_id' })
+  public element_bot_left!: ElementBot;
 
   @ManyToOne(() => Background, (background) => background.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'background_id' })
   public background!: Background;
 
   @ManyToOne(() => Frame, (frame) => frame.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'frame_id' })
   public frame!: Frame;
 
   @ManyToOne(() => Animation, (animation) => animation.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'animation_id' })
   public animation!: Animation;
 
   @ManyToOne(() => Color, (color) => color.live_streaming, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'color_id' })
   public color!: Color;
+
+  @ManyToOne(() => Font, (font) => font.live_streaming, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'font_id' })
+  public font!: Font;
 
   @OneToMany(() => Template, (template) => template.live_streaming, {
     cascade: true

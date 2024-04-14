@@ -6,13 +6,14 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   UseGuards,
-  Req
+  Req,
+  HttpCode
 } from '@nestjs/common';
 import { User } from '@/migrations/user.entity';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { Request } from 'express';
-import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+// import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +27,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(200)
   private login(@Body() body: any): Promise<string | never> {
     return this.service.login(body);
   }

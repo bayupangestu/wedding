@@ -27,7 +27,10 @@ export class Frame extends BaseEntity {
   public id!: number;
 
   @Column({ type: 'varchar' })
-  public name!: string;
+  public frame_name!: string;
+
+  @Column({ type: 'text', nullable: true })
+  public asset!: string;
 
   @OneToMany(() => Homepage, (homepage) => homepage.frame, {
     cascade: true
