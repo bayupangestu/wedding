@@ -29,13 +29,13 @@ export class Opening extends BaseEntity {
   @ManyToOne(() => ElementTop, (element_top) => element_top.opening_left, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_top_id' })
+  @JoinColumn({ name: 'element_top_left_id' })
   public element_top_left!: ElementTop;
 
   @ManyToOne(() => ElementTop, (element_top) => element_top.opening_right, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'element_top_id' })
+  @JoinColumn({ name: 'element_top_right_id' })
   public element_top_right!: ElementTop;
 
   @ManyToOne(() => ElementBot, (element_bot) => element_bot.opening_right, {
