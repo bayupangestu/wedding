@@ -55,7 +55,6 @@ export class ClientService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      // register user
       const user = new User();
       user.email = data.email;
       user.password = await this.authHelper.encodePassword(

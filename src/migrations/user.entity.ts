@@ -54,11 +54,11 @@ export class User extends BaseEntity {
   public role!: Role;
 
   @CreateDateColumn({ type: 'timestamp' })
-  public createdAt!: Date;
+  public created_at!: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  public updatedAt!: Date;
+  public updated_at!: Date;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  public deletedAt: Date | null;
+  public deleted_at: Date | null;
 }
