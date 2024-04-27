@@ -34,6 +34,8 @@ export class AuthService {
     user.name = body.name;
     user.email = body.email.toLowerCase();
     user.password = this.helper.encodePassword(body.password);
+    user.slug = `${body.name}-${Date.now()}`;
+    user.phone_number = await this.helper.phoneNumberFormat(body.phone_number);
     user.role = role;
 
     return this.repository.save(user);
