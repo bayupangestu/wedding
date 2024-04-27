@@ -16,12 +16,12 @@ export class AuthService {
   @Inject(AuthHelper)
   private readonly helper: AuthHelper;
 
-  public async register(body: any): Promise<User | never> {
-    let user: User = await this.repository.findOne({
-      where: { email: body.email }
+  public async register(body: any): Promise<any> {
+    const userData: User = await this.repository.findOne({
+      where: { email: body.email.toLowerCase() }
     });
 
-    if (user) {
+    if (userData) {
       throw new HttpException('Conflict', HttpStatus.CONFLICT);
     }
     const role = await this.roleRepository.findOne({
@@ -30,7 +30,7 @@ export class AuthService {
     if (!role) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
-
+    const user = new User();
     user.name = body.name;
     user.email = body.email.toLowerCase();
     user.password = this.helper.encodePassword(body.password);

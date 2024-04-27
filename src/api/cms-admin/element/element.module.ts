@@ -10,6 +10,7 @@ import { Animation } from '@/migrations/animation.entity';
 import { Frame } from '@/migrations/frame.entity';
 import { AuthModule } from '@/api/auth/auth.module';
 import { Font } from '@/migrations/font.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { Font } from '@/migrations/font.entity';
     AuthModule
   ],
   controllers: [ElementController],
-  providers: [ElementService]
+  providers: [ElementService, ConfigService]
 })
 export class ElementModule {}

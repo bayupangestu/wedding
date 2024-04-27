@@ -36,7 +36,7 @@ export class RoleController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   public async create(@Body() data: any): Promise<any> {
     return this.roleService.create(data);

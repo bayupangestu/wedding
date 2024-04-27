@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { ElementBot } from '@/migrations/element_bot.entity';
 import { ElementTop } from '@/migrations/element_top.entity';
 import { Background } from '@/migrations/background.entity';
@@ -10,6 +10,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import { CreateElementDto, UpdateElementDto } from './element.dto';
 import { Font } from '@/migrations/font.entity';
+import { ConfigService } from '@nestjs/config';
+
+const ImageKit = require('imagekit');
+const axios = require('axios');
 
 @Injectable()
 export class ElementService {
@@ -35,25 +39,85 @@ export class ElementService {
   private readonly fontRepository: Repository<Font>;
 
   public async create(body: any, file: any): Promise<any> {
+    const imagekit = new ImageKit({
+      publicKey: process.env.IMAGEKIT_PUBLIC,
+      privateKey: process.env.IMAGEKIT_PRIVATE,
+      urlEndpoint: process.env.IMAGEKIT_ENDPOINT
+    });
+    if (file) {
+      const imageUrl = await new Promise((resolve, reject) => {
+        fs.readFile(file.path, function (err, data) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          imagekit.upload(
+            {
+              file: data, //required
+              fileName: file.filename //required
+            },
+            function (error, result) {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result.url);
+              }
+            }
+          );
+        });
+      });
+      body.asset = imageUrl;
+    }
+
     switch (body.element) {
       case 'element-bot':
-        return await this.createElementBot(body, file);
+        return await this.createElementBot(body);
       case 'element-top':
-        return await this.createElementTop(body, file);
+        return await this.createElementTop(body);
       case 'background':
-        return await this.createBackground(body, file);
+        return await this.createBackground(body);
       case 'color':
         return await this.createColor(body);
       case 'animation':
         return await this.createAnimation(body);
       case 'frame':
-        return await this.createFrame(body, file);
+        return await this.createFrame(body);
       case 'font':
         return await this.createFont(body);
     }
   }
 
   public async update(id: number, body: any, file: any): Promise<any> {
+    const imagekit = new ImageKit({
+      publicKey: process.env.IMAGEKIT_PUBLIC,
+      privateKey: process.env.IMAGEKIT_PRIVATE,
+      urlEndpoint: process.env.IMAGEKIT_ENDPOINT
+    });
+    if (file) {
+      const imageUrl = await new Promise((resolve, reject) => {
+        fs.readFile(file.path, function (err, data) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          imagekit.upload(
+            {
+              file: data, //required
+              fileName: file.filename //required
+            },
+            function (error, result) {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result.url);
+              }
+            }
+          );
+        });
+      });
+      body.asset = imageUrl;
+    }
+
     if (body.element === 'element-bot') {
       return await this.updateElementBot(id, body, file);
     } else if (body.element === 'element-top') {
@@ -595,15 +659,15 @@ export class ElementService {
     };
   }
 
-  private async createElementBot(body: any, file: any) {
+  private async createElementBot(body: any) {
     try {
-      const bitmap = fs.readFileSync(file.path);
-      const asset = Buffer.from(bitmap).toString('base64');
+      // const bitmap = fs.readFileSync(file.path);
+      // const asset = Buffer.from(bitmap).toString('base64');
       const elementBot = new ElementBot();
 
       elementBot.element_bot_name = body.element_bot_name;
       elementBot.element_bot_type = body.element_bot_type;
-      elementBot.element_bot_asset = asset;
+      elementBot.element_bot_asset = body.asset;
 
       await this.elementBotRepository.save(elementBot);
       return {
@@ -616,12 +680,12 @@ export class ElementService {
     }
   }
 
-  private async createElementTop(body: any, file: any) {
-    const bitmap = fs.readFileSync(file.path);
-    const asset = Buffer.from(bitmap).toString('base64');
+  private async createElementTop(body: any) {
+    // const bitmap = fs.readFileSync(file.path);
+    // const asset = Buffer.from(bitmap).toString('base64');
     const elementTop = new ElementTop();
     elementTop.element_top_name = body.element_top_name;
-    elementTop.element_top_asset = asset;
+    elementTop.element_top_asset = body.asset;
     elementTop.element_top_type = body.element_top_type;
     await this.elementTopRepository.save(elementTop);
     return {
@@ -630,12 +694,12 @@ export class ElementService {
     };
   }
 
-  private async createBackground(body: any, file: any) {
-    const bitmap = fs.readFileSync(file.path);
-    const asset = Buffer.from(bitmap).toString('base64');
+  private async createBackground(body: any) {
+    // const bitmap = fs.readFileSync(file.path);
+    // const asset = Buffer.from(bitmap).toString('base64');
     const background = new Background();
     background.backgorund_name = body.background_name;
-    background.background_asset = asset;
+    background.background_asset = body.asset;
     await this.backgroundRepository.save(background);
     return {
       statusCode: 201,
@@ -663,7 +727,7 @@ export class ElementService {
     };
   }
 
-  private async createFrame(body: any, file: any) {
+  private async createFrame(body: any) {
     // const bitmap = fs.readFileSync(file.path);
     // const asset = Buffer.from(bitmap).toString('base64');
     const frame = new Frame();
@@ -702,16 +766,15 @@ export class ElementService {
     if (!elementBot) {
       throw new HttpException('Element Bot Not found', 404);
     }
-    if (body.element_bot_name) {
-      elementBot.element_bot_name = body.element_bot_name;
-    }
-    if (file) {
-      const bitmap = fs.readFileSync(file);
-      elementBot.element_bot_asset = Buffer.from(bitmap).toString('base64');
-    }
-    if (file) {
-      elementBot.element_bot_type = body.elemenet_bot_type;
-    }
+    elementBot.element_bot_name = body.element_bot_name
+      ? body.element_bot_name
+      : elementBot.element_bot_name;
+    elementBot.element_bot_type = body.element_bot_type
+      ? body.element_bot_type
+      : elementBot.element_bot_type;
+    elementBot.element_bot_asset = body.asset
+      ? body.asset
+      : elementBot.element_bot_asset;
     await this.elementBotRepository.update(id, elementBot);
     return {
       statusCode: 200,
@@ -728,16 +791,15 @@ export class ElementService {
     if (!elementTop) {
       throw new HttpException('Element Top Not found', 404);
     }
-    if (body.element_top_name) {
-      elementTop.element_top_name = body.element_top_name;
-    }
-    if (file) {
-      const bitmap = fs.readFileSync(file);
-      elementTop.element_top_asset = Buffer.from(bitmap).toString('base64');
-    }
-    if (body.element_top_type) {
-      elementTop.element_top_type = body.element_top_type;
-    }
+    elementTop.element_top_name = body.element_top_name
+      ? body.element_top_name
+      : elementTop.element_top_name;
+    elementTop.element_top_asset = body.asset
+      ? body.asset
+      : elementTop.element_top_asset;
+    elementTop.element_top_type = body.element_top_type
+      ? body.element_top_type
+      : elementTop.element_top_type;
     await this.elementTopRepository.update(id, elementTop);
     return {
       statusCode: 200,
@@ -754,13 +816,12 @@ export class ElementService {
     if (!background) {
       throw new HttpException('Background Not found', 404);
     }
-    if (body.background_name) {
-      background.backgorund_name = body.background_name;
-    }
-    if (file) {
-      const bitmap = fs.readFileSync(file);
-      background.background_asset = Buffer.from(bitmap).toString('base64');
-    }
+    background.backgorund_name = body.background_name
+      ? body.background_name
+      : background.backgorund_name;
+    background.background_asset = body.asset
+      ? body.asset
+      : background.background_asset;
     await this.backgroundRepository.update(id, background);
     return {
       statusCode: 200,
@@ -815,13 +876,8 @@ export class ElementService {
     if (!frame) {
       throw new HttpException('Frame Not found', 404);
     }
-    if (body.name) {
-      frame.frame_name = body.frame_name;
-    }
-    if (file) {
-      const bitmap = fs.readFileSync(file);
-      frame.asset = Buffer.from(bitmap).toString('base64');
-    }
+    frame.frame_name = body.frame_name ? body.frame_name : frame.frame_name;
+    // frame.asset = body.asset ? body.asset : frame.asset;
     await this.frameRepository.update(id, frame);
     return {
       statusCode: 200,
