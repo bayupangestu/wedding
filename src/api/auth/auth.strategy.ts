@@ -1,9 +1,9 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { User } from "@/migrations/user.entity";
-import { AuthHelper } from "./auth.helper";
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from '@/migrations/user.entity';
+import { AuthHelper } from './auth.helper';
 
 Injectable();
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,8 +12,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(@Inject(ConfigService) config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get("JWT_KEY"),
-      ignoreExpiration: true,
+      secretOrKey: process.env.JWT_KEY,
+      ignoreExpiration: true
     });
   }
 
