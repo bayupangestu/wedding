@@ -4,6 +4,8 @@ import { ILike, Repository } from 'typeorm';
 import { User } from '@/migrations/user.entity';
 import { AuthHelper } from '@/api/auth/auth.helper';
 import { Role } from '@/migrations/role.entity';
+import { BrideInfo } from '@/migrations/bride_info.entity';
+import { GroomInfo } from '@/migrations/groom_info.entity';
 
 @Injectable()
 export class UserService {
@@ -37,7 +39,9 @@ export class UserService {
       const skip = (query.page - 1) * query.pageSize;
       const option: any = {
         relations: {
-          role: true
+          BrideInfo: true,
+          role: true,
+          GroomInfo: true
         },
         skip: skip,
         take: query.pageSize,
