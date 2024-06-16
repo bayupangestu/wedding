@@ -39,9 +39,9 @@ export class UserService {
       const skip = (query.page - 1) * query.pageSize;
       const option: any = {
         relations: {
-          BrideInfo: true,
+          bride_info: true,
           role: true,
-          GroomInfo: true
+          groom_info: true
         },
         skip: skip,
         take: query.pageSize,
@@ -56,13 +56,16 @@ export class UserService {
         };
       }
       const [data, total] = await this.userRepository.findAndCount(option);
+
       const result = await data.map((item: any) => {
         return {
           id: item.id,
           name: item.name,
           email: item.email,
           phone_number: item.phone_number,
-          role: item.role.name
+          role: item.role.name,
+          groom_name: item.groom_info ? item.groom_info.full_name : null,
+          bride_name: item.bride_info ? item.bride_info.full_name : null
         };
       });
 

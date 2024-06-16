@@ -202,5 +202,14 @@ export class ClientService {
     }
   }
 
-  public async findAll(req: any): Promise<any> {}
+  public async findAll(req: any): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email: req.user.email
+      }
+    });
+    if (!user) {
+      throw new HttpException('User not found', 400);
+    }
+  }
 }
