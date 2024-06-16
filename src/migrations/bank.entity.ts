@@ -10,11 +10,17 @@ import {
   OneToMany,
   ManyToOne
 } from 'typeorm';
+import { UserBank } from './user_bank.entity';
 
 @Entity()
 export class Bank extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
+
+  @OneToMany(() => UserBank, (user_bank) => user_bank.bank, {
+    cascade: true
+  })
+  public user_bank!: UserBank[];
 
   @Column({ type: 'varchar' })
   public name!: string;

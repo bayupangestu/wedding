@@ -6,7 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BaseEntity,
-  OneToOne
+  OneToOne,
+  DeleteDateColumn
 } from 'typeorm';
 
 import { User } from './user.entity';
@@ -40,6 +41,6 @@ export class Message extends BaseEntity {
   public updated_at!: Date;
 
   @Exclude()
-  @Column({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
   public deleted_at: Date | null;
 }

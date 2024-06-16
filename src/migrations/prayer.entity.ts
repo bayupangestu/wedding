@@ -4,41 +4,43 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
   BaseEntity,
-  ManyToOne
+  OneToOne,
+  DeleteDateColumn
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+
 import { User } from './user.entity';
+import { Exclude } from 'class-transformer';
+
+// description;
+// type;
+// created_at;
+// updated_at;
+// deleted_at;
 
 @Entity()
-export class SpecialInvitation extends BaseEntity {
+export class Prayer extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @ManyToOne(() => User, (user) => user.special_invitation, {
+  @OneToOne(() => User, {
     onDelete: 'CASCADE'
   })
-  @JoinColumn({ name: 'user_id' })
   public user!: User;
 
-  @Column({ type: 'varchar' })
-  public name!: string;
+  @Column({ type: 'text' })
+  public description!: string;
 
   @Column({ type: 'varchar' })
-  public slug!: string;
+  public type!: string;
 
-  @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;
 
-  @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   public updated_at!: Date;
 
-  @Exclude()
   @DeleteDateColumn({ type: 'timestamp' })
-  public deleted_at!: Date;
+  public deleted_at: Date | null;
 }
