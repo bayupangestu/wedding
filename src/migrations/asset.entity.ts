@@ -18,6 +18,12 @@ export class Asset extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
+  @ManyToOne(() => User, (user) => user.asset, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({ name: 'user_id' })
+  public user!: User;
+
   @Column({ type: 'varchar' })
   public name!: string;
 

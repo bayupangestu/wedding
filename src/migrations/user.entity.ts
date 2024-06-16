@@ -13,6 +13,9 @@ import {
 } from 'typeorm';
 import { UserPackageTemplate } from './user_package_template.entity';
 import { Role } from './role.entity';
+import { Asset } from './asset.entity';
+import { Message } from './message.entity';
+import { SpecialInvitation } from './special_invitation.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -52,6 +55,25 @@ export class User extends BaseEntity {
   })
   @JoinColumn({ name: 'role_id' })
   public role!: Role;
+
+  @OneToMany(() => Asset, (asset) => asset.user, {
+    cascade: true
+  })
+  public asset!: Asset[];
+
+  @OneToMany(() => Message, (message) => message.user, {
+    cascade: true
+  })
+  public message!: Message[];
+
+  @OneToMany(
+    () => SpecialInvitation,
+    (special_invitation) => special_invitation.user,
+    {
+      cascade: true
+    }
+  )
+  public special_invitation!: SpecialInvitation[];
 
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;

@@ -5,7 +5,9 @@ const nodemailer = require('nodemailer');
 export class EmailService {
   public async sendEmail(data: any): Promise<any> {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp-relay.brevo.com',
+      port: 465,
+      secure: true,
       auth: {
         user: 'delonixtechnologysolutions@gmail.com',
         pass: 'delTech030224'

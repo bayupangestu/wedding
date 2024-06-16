@@ -10,6 +10,9 @@ import { MarriageReception } from '@/migrations/marriage_reception.entity';
 import { MarriageContract } from '@/migrations/marriage_contract.entity';
 import { UserPackageTemplate } from '@/migrations/user_package_template.entity';
 import { AuthService } from '@/api/auth/auth.service';
+import { UploadHelper } from '@/common/helper/upload.helper';
+import { Bank } from '@/migrations/bank.entity';
+import { Package } from '@/migrations/package.entity';
 import { Role } from '@/migrations/role.entity';
 
 @Module({
@@ -21,11 +24,13 @@ import { Role } from '@/migrations/role.entity';
       MarriageReception,
       MarriageContract,
       UserPackageTemplate,
-      Role
+      Bank,
+      Role,
+      Package
     ]),
     AuthModule
   ],
   controllers: [ClientController],
-  providers: [ClientService, AuthService]
+  providers: [ClientService, AuthService, UploadHelper]
 })
 export class ClientModule {}

@@ -5,40 +5,39 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToOne,
-  JoinColumn,
   BaseEntity,
-  ManyToOne
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+  OneToOne
 } from 'typeorm';
+
 import { Exclude } from 'class-transformer';
 import { User } from './user.entity';
 
 @Entity()
-export class SpecialInvitation extends BaseEntity {
+export class Music extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @ManyToOne(() => User, (user) => user.special_invitation, {
+  @OneToOne(() => User, {
     onDelete: 'CASCADE'
   })
   @JoinColumn({ name: 'user_id' })
   public user!: User;
 
-  @Column({ type: 'varchar' })
+  @Column()
   public name!: string;
 
-  @Column({ type: 'varchar' })
-  public slug!: string;
-
   @Exclude()
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn()
   public created_at!: Date;
 
   @Exclude()
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn()
   public updated_at!: Date;
 
   @Exclude()
-  @DeleteDateColumn({ type: 'timestamp' })
-  public deleted_at!: Date;
+  @DeleteDateColumn({ nullable: true })
+  public deleted_at!: Date | null;
 }

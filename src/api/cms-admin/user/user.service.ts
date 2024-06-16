@@ -92,7 +92,7 @@ export class UserService {
     user.name = body.name;
     user.email = body.email.toLowerCase();
     user.password = this.helper.encodePassword(body.password);
-    user.slug = `${body.name}-${Date.now()}`;
+    user.slug = `${body.bride}-${body.groom}`;
     user.phone_number = await this.helper.phoneNumberFormat(body.phone_number);
     user.role = role;
 
@@ -124,7 +124,9 @@ export class UserService {
     user.phone_number = body.phone_number
       ? await this.helper.phoneNumberFormat(body.phone_number)
       : user.phone_number;
-    user.slug = body.slug;
+    user.slug = `${body.bride}-${body.groom}`
+      ? `${body.bride}-${body.groom}`
+      : user.slug;
     await this.userRepository.update(id, user);
     return {
       statusCode: 200,
