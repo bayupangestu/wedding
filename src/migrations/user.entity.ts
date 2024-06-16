@@ -9,13 +9,16 @@ import {
   DeleteDateColumn,
   OneToMany,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  OneToOne
 } from 'typeorm';
 import { UserPackageTemplate } from './user_package_template.entity';
 import { Role } from './role.entity';
 import { Asset } from './asset.entity';
 import { Message } from './message.entity';
 import { SpecialInvitation } from './special_invitation.entity';
+import { BrideInfo } from './bride_info.entity';
+import { GroomInfo } from './groom_info.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -74,6 +77,16 @@ export class User extends BaseEntity {
     }
   )
   public special_invitation!: SpecialInvitation[];
+
+  @OneToOne(() => BrideInfo, (brideInfo) => brideInfo.user, {
+    cascade: true
+  })
+  public bride_info!: BrideInfo;
+
+  @OneToOne(() => GroomInfo, (groomInfo) => groomInfo.user, {
+    cascade: true
+  })
+  public groom_info!: GroomInfo;
 
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;
